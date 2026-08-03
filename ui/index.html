@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UET K3 RAG Intelligence — Tư Vấn Quy Chế & Tuyển Sinh</title>
+    <!-- Modern Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Ambient glowing background shapes -->
+    <div class="ambient-glow glow-top-left"></div>
+    <div class="ambient-glow glow-top-right"></div>
+    <div class="ambient-glow glow-bottom-center"></div>
+
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo-badge">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-tag">K3 UNIVERSITY RAG</span>
+                </div>
+                <h1 class="app-title">UET K3 RAG <span class="gradient-text">Intelligence</span></h1>
+                <p class="app-subtitle">Hệ thống hỏi đáp Quy chế Đào tạo & Tuyển sinh Trường Đại học Công nghệ (ĐHQGHN) có dẫn nguồn xác thực</p>
+            </div>
+            <div class="header-right">
+                <div class="status-card" id="statusCard">
+                    <div class="status-indicator online"></div>
+                    <div class="status-info">
+                        <span class="status-label">Knowledge Base</span>
+                        <span class="status-value" id="kbStatus">Loading chunks...</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- BENCHMARK QUICK-SELECT BAR -->
+        <section class="benchmark-section">
+            <div class="section-label">
+                <span class="label-icon">🔥</span>
+                <span>Bộ Câu Hỏi Chuẩn (Benchmark K3):</span>
+            </div>
+            <div class="benchmark-pills" id="benchmarkPills">
+                <button class="pill-btn" data-qid="Q1" data-query="Ngưỡng đầu vào đại học chính quy năm 2025 của ngành Trí tuệ nhân tạo là bao nhiêu điểm?" data-filter="">
+                    <span class="pill-id">Q1</span>
+                    <span class="pill-text">Ngưỡng điểm ngành AI 2025</span>
+                </button>
+                <button class="pill-btn" data-qid="Q2" data-query="Hạn cuối nộp hồ sơ xét tuyển trực tuyến theo HSA và SAT năm 2025 sau khi gia hạn là khi nào?" data-filter="">
+                    <span class="pill-id">Q2</span>
+                    <span class="pill-text">Hạn nộp hồ sơ sau gia hạn</span>
+                </button>
+                <button class="pill-btn" data-qid="Q3" data-query="Năm 2026 sinh viên năm thứ nhất Trường ĐH Công nghệ học ở cơ sở nào và được đăng ký tối đa bao nhiêu nguyện vọng?" data-filter="">
+                    <span class="pill-id">Q3</span>
+                    <span class="pill-text">Cơ sở học & Nguyện vọng 2026</span>
+                </button>
+                <button class="pill-btn" data-qid="Q4" data-query="Một học phần có khối lượng bao nhiêu tín chỉ và một tín chỉ tương ứng bao nhiêu giờ tín chỉ?" data-filter="">
+                    <span class="pill-id">Q4</span>
+                    <span class="pill-text">Quy định số tín chỉ & giờ TC</span>
+                </button>
+                <button class="pill-btn" data-qid="Q5" data-query="Trường ĐH Công nghệ có tổ chức chương trình du học ngắn hạn thu phí và cử người liên hệ thí sinh thu tiền không?" data-filter="audience:all">
+                    <span class="pill-id">Q5</span>
+                    <span class="pill-text">Cảnh báo giả mạo (Filter All)</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SEARCH BAR & FILTERS -->
+        <section class="search-section">
+            <form id="searchForm" class="search-form">
+                <div class="input-wrapper">
+                    <span class="search-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </span>
+                    <input type="text" id="queryInput" class="search-input" placeholder="Nhập câu hỏi về tuyển sinh hoặc quy chế học vụ UET..." required autocomplete="off">
+                    <button type="submit" id="submitBtn" class="submit-btn">
+                        <span>Truy Vấn AI</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+
+                <!-- METADATA FILTERS -->
+                <div class="filter-bar">
+                    <span class="filter-label">Metadata Filter:</span>
+                    <label class="radio-chip">
+                        <input type="radio" name="metaFilter" value="" checked>
+                        <span class="chip-content">Tất cả tài liệu (Không lọc)</span>
+                    </label>
+                    <label class="radio-chip">
+                        <input type="radio" name="metaFilter" value="audience:all">
+                        <span class="chip-content">audience: all (Thông báo/Quy chế chung)</span>
+                    </label>
+                    <label class="radio-chip">
+                        <input type="radio" name="metaFilter" value="audience:student">
+                        <span class="chip-content">audience: student (Dành cho Sinh viên)</span>
+                    </label>
+                </div>
+            </form>
+        </section>
+
+        <!-- MAIN RESULTS GRID -->
+        <main class="results-grid" id="resultsGrid">
+            <!-- LEFT COLUMN: AI SYNTHESIZED ANSWER -->
+            <div class="grid-column left-col">
+                <div class="card answer-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <span class="card-icon">🤖</span>
+                            <h3>AI Synthesized Answer</h3>
+                        </div>
+                        <div class="model-badge" id="modelBadge">KnowledgeBaseAgent + Demo LLM</div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Loading placeholder -->
+                        <div class="placeholder-state" id="answerPlaceholder">
+                            <div class="empty-icon">✨</div>
+                            <h4>Sẵn sàng tư vấn thông tin</h4>
+                            <p>Chọn câu hỏi benchmark phía trên hoặc nhập câu hỏi của riêng bạn để xem kết quả truy xuất có dẫn nguồn.</p>
+                        </div>
+
+                        <!-- Spinner -->
+                        <div class="loading-state hidden" id="answerLoading">
+                            <div class="spinner"></div>
+                            <p>Đang tìm kiếm ngữ cảnh & tổng hợp câu trả lời...</p>
+                        </div>
+
+                        <!-- Result content -->
+                        <div class="answer-content hidden" id="answerContent">
+                            <div class="answer-text-box" id="answerText"></div>
+                            <div class="grounding-info">
+                                <span class="grounding-icon">📌</span>
+                                <span id="groundingNote">Các số trích dẫn [1], [2] tương ứng với các thẻ bằng chứng bên phải.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: RETRIEVED CHUNKS -->
+            <div class="grid-column right-col">
+                <div class="card chunks-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <span class="card-icon">📚</span>
+                            <h3>Top-3 Retrieved Evidence (Chunks)</h3>
+                        </div>
+                        <div class="chunk-count-badge" id="retrievedCount">0 chunks</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="placeholder-state" id="chunksPlaceholder">
+                            <p class="subtle-text">Kết quả tìm kiếm ngữ nghĩa từ <strong>RecursiveChunker(chunk_size=400)</strong> sẽ xuất hiện tại đây.</p>
+                        </div>
+
+                        <div class="loading-state hidden" id="chunksLoading">
+                            <div class="skeleton-card"></div>
+                            <div class="skeleton-card"></div>
+                            <div class="skeleton-card"></div>
+                        </div>
+
+                        <div class="chunks-list hidden" id="chunksList">
+                            <!-- Chunks injected dynamically via app.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="app-footer">
+            <p><strong>AI Thực Chiến (RAG Checkpoint 6)</strong> • Xây dựng bằng Python HTTP Server + Vanilla CSS/JS • Không phụ thuộc thư viện bên thứ ba</p>
+        </footer>
+    </div>
+
+    <!-- Script -->
+    <script src="app.js"></script>
+</body>
+</html>
